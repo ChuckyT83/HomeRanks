@@ -46,8 +46,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'corsheaders',
     'scraperApp',
-    'allauth',
-
+    'adrf'
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -90,6 +89,9 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ],
 }
 

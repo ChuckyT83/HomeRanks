@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib import admin
-from .views import HomeListViewSet, IndexViewSet, LogoutViewSet, SelectHomeListViewSet, CustomTokenObtainPairView
+from .views import *
 from rest_framework.routers import DefaultRouter
 from django.contrib import admin
 from django.urls import path, include
@@ -14,8 +14,10 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 router = DefaultRouter()
 router.register(r'homelist', HomeListViewSet, basename='homelist')
 router.register(r'selecthomelist', SelectHomeListViewSet, basename='showhomelists')
+router.register(r'homes', HomeViewSet, basename='homes')
 router.register(r'index', IndexViewSet, basename='index')
 router.register(r'logout', LogoutViewSet, basename='logout')
+router.register(r'getKey', GetAPIKeyViewSet, basename='getKey')
 #router.register(r'auth', CustomObtainAuthToken, basename='auth')
 
 urlpatterns = [

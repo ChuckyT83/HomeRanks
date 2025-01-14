@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from . models import *
+from scripts import homeScraper, homeSearch
+from .models import *
 from rest_framework.views import APIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -13,11 +14,10 @@ from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import viewsets, status
-from . serializers import *
-from scripts import zillowScraper, zillowSearch
+from .serializers import *
 import json
 from contextlib import suppress
-
+from adrf import viewsets as async_viewsets
 
 # Create your views here.
 
@@ -41,7 +41,7 @@ class LogoutViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     
 
-class HomeListViewSet(viewsets.ModelViewSet):
+class HomeListViewSet(async_viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
     serializer_class = HomeListSerializer
     def list(self, request):
@@ -51,10 +51,17 @@ class HomeListViewSet(viewsets.ModelViewSet):
         serializer = HomeSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    # def perform_create(self, serializer):
-    #     response = super().perform_create(serializer)
-    #     instance = serializer.instance
-    #     return response
+        
+class HomeViewSet(async_viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = HomeSerializer
+
+    # def get_serializer(self, *args, **kwargs):
+    #     kwargs['context'] = {'request': self.request}
+    #     return super().get_serializer(*args, **kwargs)
+    
+        
+
     
     
 class SelectHomeListViewSet(viewsets.ModelViewSet):
@@ -70,3 +77,21 @@ class SelectHomeListViewSet(viewsets.ModelViewSet):
 class CustomTokenObtainPairView(TokenObtainPairView):
     # Replace the serializer with your custom
     serializer_class = CustomTokenObtainPairSerializer
+
+class GetAPIKeyViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = GetAPIKeySerializer
+    queryset = APIKeys.objects.all()
+
+    def get_queryset(self):
+        return self.queryset
+
+    def get_object(self):
+        key_id = self.kwargs['pk']
+        return self.get_queryset().get(id=key_id)
+
+
+    def retrieve(self, request, pk):
+        instance = self.get_object()
+        serializer = self.serializer_class(instance)
+        return Response(serializer.data)

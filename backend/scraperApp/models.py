@@ -8,10 +8,12 @@ import asyncio
 # Create your models here.
 
 class Home(models.Model):
+    date_time = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
     address = models.CharField(max_length=200)
     price = models.IntegerField()
     bedrooms = models.IntegerField()
-    bathrooms = models.IntegerField()
+    bathrooms = models.FloatField()
     sqft = models.IntegerField()
     lot_size = models.IntegerField()
     year_built = models.IntegerField()
@@ -25,7 +27,8 @@ class Home(models.Model):
     fireplace = models.CharField(max_length=200)
     status = models.CharField(max_length=1500)
     homeUrl = models.CharField(max_length=300)
-    thumbnail = models.ImageField(upload_to='images/homes/', default='images/default.png')
+    description = models.CharField(max_length=10000, default="")
+    thumbnail = models.ImageField(upload_to='images/homes/',  default='images/default.png')
 
     async def get_thumb(url):
         client = httpx.AsyncClient(http2=True)
@@ -35,8 +38,9 @@ class Home(models.Model):
 
 
 class HomeList(models.Model):
+    date_time = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     homes = models.ManyToManyField(Home, default=None)
     west_cord = models.FloatField(default=0)
     east_cord = models.FloatField(default=0)
@@ -44,6 +48,13 @@ class HomeList(models.Model):
     north_cord = models.FloatField(default=0)
     max_price = models.IntegerField(default=0)
     min_beds = models.IntegerField(default=0)
-    min_baths = models.IntegerField(default=0)
-    min_acres = models.IntegerField(default=0)
+    min_baths = models.FloatField(default=0)
+    min_acres = models.FloatField(default=0)
     keywords = models.CharField(max_length=200, default="")
+
+    def __str__(self):
+        return self.name + " by " + self.user.username
+    
+class APIKeys(models.Model):
+    name = models.CharField(max_length=200)
+    key = models.CharField(max_length=2000)
