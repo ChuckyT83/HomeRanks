@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row';
 import { Container } from 'react-bootstrap';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 
 
@@ -16,11 +17,13 @@ const HomeList = () => {
     const [searchParams] = useSearchParams();
     const [badListName, setBadListName] = useState(false);
     const [isNewList, setIsNewList] = useState(false);
+    const [homelistId, setHomelistId] = useState();
 
 
 
 
-    const handleRating = (event, rating) => { axiosInstance.patch(`home/${event.target.name}/`, {preRating: rating})
+    const handleRating = (event, rating) => { 
+        axiosInstance.patch(`homes/${event.target.name}/`, {preRating: rating})
         .then(res =>
             {
             console.log(rating, event.target.name, res.id)
@@ -31,6 +34,12 @@ const HomeList = () => {
             setHomelist(updateList)}
         )
         }
+
+    const handleRemove = (event) => {
+        axiosInstance.delete('homelist/remove_home/', {data: {home_id: event.target.id, list_name: searchParams.get('list_name')}})
+        console.log(event)
+        setHomelist(homelist.filter(home => home.id !== Number(event.target.id)))
+    }
         
 
     
@@ -77,6 +86,7 @@ const HomeList = () => {
                 <ListGroup.Item varient="info">
                     <Row>
                         <Col sm={3}>
+                         <Row>
                             <Container eventKey={home.id} key={home.id}>
                                 <figure className="position-relative">
                                     <img src={"http://127.0.0.1:8000"+home.thumbnail} alt={home.address+" thumbnail"} className="img-fluid"/>
@@ -88,6 +98,12 @@ const HomeList = () => {
                                 <a href={home.homeUrl} target="_blank" rel="noopener noreferrer">{home.address}</a>
                                 </figure>
                             </Container>
+                            </Row>
+                            <Row>
+                                <Button varient="contained" href={home.homeUrl} target="_blank" rel="noopener noreferrer">View Listing</Button>
+                                <Button varient="contained" onClick={handleRemove} id={home.id}>Remove From List</Button>
+                            </Row>
+
                         </Col>
                         <Col>
                             <Row>
@@ -96,6 +112,7 @@ const HomeList = () => {
                             <Row> 
                                 {home.status} | Days on market: {home.days_on_market} <div>{home.description}</div>
                             </Row>
+
                         </Col>
                     </Row>
                 </ListGroup.Item>

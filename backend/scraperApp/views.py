@@ -7,7 +7,7 @@ from .models import *
 from rest_framework.views import APIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
@@ -50,6 +50,15 @@ class HomeListViewSet(async_viewsets.ModelViewSet):
         queryset = user_homelist.homes.all()
         serializer = HomeSerializer(queryset, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['DELETE'], url_path='remove_home')
+    def remove_home(self, request):
+        home_id = request.data['home_id']
+        homelist = HomeList.objects.get(name=request.data['list_name'])
+        homelist.homes.remove(home_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
         
 class HomeViewSet(async_viewsets.ModelViewSet):
@@ -61,6 +70,22 @@ class HomeViewSet(async_viewsets.ModelViewSet):
     #     kwargs['context'] = {'request': self.request}
     #     return super().get_serializer(*args, **kwargs)
     
+class RemoveHomeViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = HomeListSerializer
+    queryset = HomeList.objects.all()
+
+    def get_queryset(self):
+        return self.queryset
+
+    def get_object(self):
+        home_id = self.kwargs['pk']
+        return self.get_queryset().get(id=home_id)
+
+    def destroy(self, request, pk):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
         
 
     
