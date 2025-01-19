@@ -91,7 +91,7 @@ export const CreateHomeList = () => {
                             <Pin background={'#00BCff'} glyphColor={'#000'} borderColor={'#000'}/>
                         </AdvancedMarker>
                         <InfoWindow position={position} pixelOffset={[0,-50]} maxWidth={200}>
-                            Place the yellow pin to the top left and blue pin to bottom right to set coordinates.
+                            Place the yellow pin to the top left (North West) and blue pin to bottom right (South East) to set coordinates.
                             </InfoWindow>
                     </Map>
                 </APIProvider>}

@@ -55,6 +55,7 @@ class HomeListViewSet(async_viewsets.ModelViewSet):
 class HomeViewSet(async_viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
     serializer_class = HomeSerializer
+    queryset = Home.objects.all()
 
     # def get_serializer(self, *args, **kwargs):
     #     kwargs['context'] = {'request': self.request}

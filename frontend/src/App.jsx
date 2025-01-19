@@ -1,4 +1,7 @@
-import '../node_modules/bootstrap/dist/css/bootstrap.css';
+
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ScopedCssBaseline from '@mui/material/ScopedCssBaseline';
 import React from 'react';
 import HomeList from './components/ViewHomelist';
 import {CreateHomeList} from './components/CreateHomeList';
@@ -8,14 +11,16 @@ import {Home} from './components/Home';
 import {SelectHomeList} from './components/SelectHomeList';
 import NavBar from './components/NavBar';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import "bootstrap-icons/font/bootstrap-icons.css";
 //import { ToastContainer } from 'react-toastify';
 
 
 
 const App = () => {
   return (
-    
+
     <Router>
+      
       <NavBar/>
       <Routes>
       
@@ -28,6 +33,7 @@ const App = () => {
       </Routes>
       {/*<ToastContainer hideProgressBar={true} newestOnTop={true}/>*/}
     </Router>
+
     
   );
 }
