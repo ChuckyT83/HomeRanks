@@ -1,6 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 
 
@@ -24,15 +26,13 @@ export const SelectHomeList = () => {
         
 
     return (
-        <div className="container">
-            <div className="row mt-5">
-            <div className="col-sm-12">
+        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center',  height: '100vh'}}>
             <h1>Select Home List</h1>
             <form onSubmit={handleSubmit}>
             
                 {homeListList.map(list => (
                     <div className="form-check">
-                        <label>
+                        <label><Box sx={{fontWeight: 'bold'}}>
                             <input 
                                 type="radio"
                                 name="homelist"
@@ -40,13 +40,14 @@ export const SelectHomeList = () => {
                                 className="form-check-input"
                                 onChange={(e) => setSelectedList(e.target.value)}
                             />
-                            {list.name} Homes: {list.num_homes} | {list.max_price} {list.min_beds} {list.min_baths} {list.min_acres}
+                            {list.name} | Homes: {list.num_homes}</Box> <Box>Price: {list.max_price} Min Beds: {list.min_beds} Min baths: {list.min_baths} Min Acres: {list.min_acres}</Box>
                         </label>
                     </div>  
-            ))}
-            <button className="btn btn-primary mt-2" type="submit">View</button>      
+            ))}<Box sx={{justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column'}}>
+            <Button variant="contained" type="submit">View</Button>
+            </Box>      
             </form>
-    </div></div></div>)
+    </Box>)
 };
 
 

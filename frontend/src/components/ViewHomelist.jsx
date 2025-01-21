@@ -1,14 +1,20 @@
 import React, { useState, useEffect, setState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {axiosInstance} from './axiosInstance';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Image from 'react-bootstrap/Image';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import { Container } from 'react-bootstrap';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid2';
+import { borderRadius, borders } from '@mui/system';
+
+
 
 
 
@@ -18,9 +24,11 @@ const HomeList = () => {
     const [badListName, setBadListName] = useState(false);
     const [isNewList, setIsNewList] = useState(false);
     const [homelistId, setHomelistId] = useState();
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
 
-
-
+    const handleListItemClick = (event, index) => {
+        setSelectedIndex(index);
+      };
 
     const handleRating = (event, rating) => { 
         axiosInstance.patch(`homes/${event.target.name}/`, {preRating: rating})
@@ -80,47 +88,45 @@ const HomeList = () => {
             
         ) : (
 
-        <ListGroup varient="flush">
-            {homelist.map(home => (
+        <List>
+            {homelist.sort((a,b) => b.preRating - a.preRating).map(home => (
+            <ListItem key={home.id} disablePadding>
 
-                <ListGroup.Item varient="info">
-                    <Row>
-                        <Col sm={3}>
-                         <Row>
-                            <Container eventKey={home.id} key={home.id}>
-                                <figure className="position-relative">
-                                    <img src={"http://127.0.0.1:8000"+home.thumbnail} alt={home.address+" thumbnail"} className="img-fluid"/>
+                <Box className={home.id}>
+                    <Grid container spacing={{xs: 0}} columns={{xs:1, md: 25}} sx={{justifyContent: 'center', alignItems: 'flex-start', 
+                    '--Grid-borderWidth': '0px',
+                        borderTop: '0px solid',
+                        borderLeft: '0 solid',
+                        borderBottom: '2px solid',
+                        borderColor: 'black',
+}}>
+                        <Grid container spacing={0} size={{xs:1, md: 7}} direction={"column"} sx={{justifyContent: 'flex-start', alignItems: 'center', margin: 0}}>
+                                <figure>
+                                    <Box component="img" sx={{width: "100%", maxWidth:550, minWidth:225, margin:0, padding:0, border:"solid black 2px", borderRadius: "5px"}} src={"http://127.0.0.1:8000"+home.thumbnail} alt={home.address+" thumbnail"} />
                                     <figcaption>
-                                        <Stack spacing={.5}>
-                                            <Rating style={{opacity: 200}} size="large" name={home.id} precision={0.5} value={home.preRating} onChange={(event, rating) => handleRating(event, rating)}/>
+                                        <Stack key={home.id} spacing={.5} >
+                                            <Rating  size="large" key={home.id} name={home.id} precision={0.5} value={home.preRating} onChange={(event, rating) => handleRating(event, rating)} />
                                         </Stack>
-                                    </figcaption>
-                                <a href={home.homeUrl} target="_blank" rel="noopener noreferrer">{home.address}</a>
+                                    </figcaption><a href={home.homeUrl} target="_blank" rel="noopener noreferrer"></a>
                                 </figure>
-                            </Container>
-                            </Row>
-                            <Row>
-                                <Button varient="contained" href={home.homeUrl} target="_blank" rel="noopener noreferrer">View Listing</Button>
-                                <Button varient="contained" onClick={handleRemove} id={home.id}>Remove From List</Button>
-                            </Row>
-
-                        </Col>
-                        <Col>
-                            <Row>
-                                ${home.price} - Acres: {(home.lot_size  / 43560).toFixed(2)} Square Feet: {home.sqft} Bedrooms: {home.bedrooms} Bathrooms: {home.bathrooms} Heating: {home.heating} Cooling: {home.cooling}
-                            </Row>
-                            <Row> 
-                                {home.status} | Days on market: {home.days_on_market} <div>{home.description}</div>
-                            </Row>
-
-                        </Col>
-                    </Row>
-                </ListGroup.Item>
-                
-                ))}      
-        </ListGroup> 
-
-        )}
+                        
+                            
+                                <Button variant="contained" href={home.homeUrl} target="_blank" rel="noopener noreferrer" sx={{marginBottom: 1, marginTop: 0}}>View Listing</Button>
+                                <Button variant="contained" sx={{marginBottom: 2}} onClick={handleRemove} id={home.id}>Remove From List</Button>
+                        </Grid>
+                        <Grid container size="grow" direction={"column"} sx={{justifyContent: 'flex-start', alignItems: 'left', margin: 2}}>
+                                <Grid>{home.address}</Grid>
+                                <Grid>Price: ${home.price} - Acres: {(home.lot_size  / 43560).toFixed(2)} Square Feet: {home.sqft} Bedrooms: {home.bedrooms} Bathrooms: {home.bathrooms}</Grid>
+                                <Grid>Heating: {home.heating} Cooling: {home.cooling}</Grid>
+                                <Grid>
+                                Status: {home.status} | Days on market: {home.days_on_market} <div>{home.description}</div></Grid>
+                                </Grid>
+                        </Grid>
+                </Box>
+            </ListItem>
+            ))}
+                    
+        </List>)} 
     </div>)
 };
 

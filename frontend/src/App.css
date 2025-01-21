@@ -1,13 +1,11 @@
 figcaption {
   position: absolute;
-  top: .5rem;
-  margin: 0 .5rem;;
-  background-color: rgba(0, 0, 0, 0.50
-  );
+  top: 1.15rem;
+  margin: 0 0rem;
+  padding: .25rem;
+  background-color: rgba(0, 0, 0, .75);
+  border: solid 0px #000;
+  border-radius: 5px 0 5px 0;
+  
 }
-
-rating {
-  opacity: 100%;
-}
-
 

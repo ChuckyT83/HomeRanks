@@ -21,8 +21,8 @@ export const Home = () => {
         }, []);
 
     return (
-        <div className="form-signin mt-5 text-center">
-            <p>Welcome</p>
+        <div>
+            <p>Welcome</p> Select
         </div>
     )
 }

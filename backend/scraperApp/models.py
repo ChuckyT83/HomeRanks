@@ -27,7 +27,7 @@ class Home(models.Model):
     fireplace = models.CharField(max_length=200)
     status = models.CharField(max_length=1500)
     homeUrl = models.CharField(max_length=300)
-    description = models.CharField(max_length=10000, default="")
+    description = models.CharField(max_length=10000, default="", null=True)
     thumbnail = models.ImageField(upload_to='images/homes/',  default='images/default.png')
 
     async def get_thumb(url):

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from "@mui/material/Button";
 import axios from "axios";
 
 export const Login = () => {
@@ -79,7 +80,7 @@ const handleSubmit = async (e) => {
             />
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" disabled={isLoading} onClick={handleSubmit}>Submit</button>
+            <Button variant="outlined" type="submit" disabled={isLoading} onClick={handleSubmit}>Submit</Button>
           </div>
         </div>
       </form>

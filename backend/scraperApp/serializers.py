@@ -26,6 +26,7 @@ class HomeListSerializer(async_serializers.ModelSerializer):
         model = HomeList
         fields = '__all__'
         read_only_fields = ['user']
+        extra_kwargs = {'keywords': {'required': False, 'allow_blank': True}}
 
     def update(self, instance, validated_data):
         return instance
